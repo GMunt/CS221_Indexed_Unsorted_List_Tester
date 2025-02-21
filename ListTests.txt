@@ -367,6 +367,40 @@ Define tests for at least 21 change scenarios, in addition to the 3 given as exa
     listIterator(0) throws UnsupportedOperationException
     toString returns "[]"
 16) [A] -> set(0,B) -> [B]
+  Tests:
+    addToFront(C) throws no Exception
+    addToRear(C) throws no Exception
+    addAfter(B, C) throws NoSuchElementException
+    addAfter(C, B) throws no Exception
+    add(C) throws no Exception
+    add(-1, C) throws IndexOutOfBoundsException
+    add(0, C) throws no Exception
+    add(1, C) throws no Exception
+    removeFirst() throws no Exception
+    removeLast() throws no Exception
+    remove(B) throws no Exception
+    remove(A) throws NoSuchElementException
+    remove(C) throws NoSuchElementException
+    remove(-1) throws IndexOutOfBoundsException
+    remove(0) throws no Exception
+    set(-1, C) throws IndexOutOfBoundsException
+    set(0, C) throws no Exception
+    set(1, C) throws IndexOutOfBoundsException
+    get(-1) throws IndexOutOfBoundsException
+    get(0) returns B
+    get(1) throws IndexOutOfBoundsException
+    indexOf(A) returns 0
+    indexOf(B) returns -1
+    first() returns B
+    last() returns B
+    contains(A) returns true
+    contains(B) returns false
+    isEmpty() returns false
+    size() returns 1
+    iterator() returns an Iterator reference
+    listIterator() throws UnsupportedOperationException
+    listIterator(0) throws UnsupportedOperationException
+    toString returns "[B]"
 17) [A,B] -> addToFront(C) -> [C,A,B]
 18) [A,B] -> addToRear(C) -> [A,B,C]
 19) [A,B] -> addAfter(C,A) -> [A,C,B]
