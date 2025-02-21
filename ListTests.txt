@@ -40,12 +40,12 @@ Define tests for at least 21 change scenarios, in addition to the 3 given as exa
     add(-1, B) throws IndexOutOfBoundsException
     add(0, B) throws no Exception
     add(1, B) throws no Exception
-    removeFirst() throws no Exception
-    removeLast() throws no Exception
-    remove(A) throws no Exception
+    removeFirst() returns A
+    removeLast() returns A
+    remove(A) returns A
     remove(B) throws NoSuchElementException
     remove(-1) throws IndexOutOfBoundsException
-    remove(0) throws no Exception
+    remove(0) returns A
     set(-1, B) throws IndexOutOfBoundsException
     set(0, B) throws no Exception
     set(1, B) throws IndexOutOfBoundsException
@@ -74,12 +74,12 @@ Define tests for at least 21 change scenarios, in addition to the 3 given as exa
     add(-1, B) throws IndexOutOfBoundsException
     add(0, B) throws no Exception
     add(1, B) throws no Exception
-    removeFirst() throws no Exception
-    removeLast() throws no Exception
-    remove(A) throws no Exception
+    removeFirst() returns A
+    removeLast() returns A
+    remove(A) returns A
     remove(B) throws NoSuchElementException
     remove(-1) throws IndexOutOfBoundsException
-    remove(0) throws no Exception
+    remove(0) returns A
     set(-1, B) throws IndexOutOfBoundsException
     set(0, B) throws no Exception
     set(1, B) throws IndexOutOfBoundsException
@@ -108,12 +108,12 @@ Define tests for at least 21 change scenarios, in addition to the 3 given as exa
     add(-1, B) throws IndexOutOfBoundsException
     add(0, B) throws no Exception
     add(1, B) throws no Exception
-    removeFirst() throws no Exception
-    removeLast() throws no Exception
-    remove(A) throws no Exception
+    removeFirst() returns A
+    removeLast() returns A
+    remove(A) returns A
     remove(B) throws NoSuchElementException
     remove(-1) throws IndexOutOfBoundsException
-    remove(0) throws no Exception
+    remove(0) returns A
     set(-1, B) throws IndexOutOfBoundsException
     set(0, B) throws no Exception
     set(1, B) throws IndexOutOfBoundsException
@@ -142,12 +142,12 @@ Define tests for at least 21 change scenarios, in addition to the 3 given as exa
     add(-1, B) throws IndexOutOfBoundsException
     add(0, B) throws no Exception
     add(1, B) throws no Exception
-    removeFirst() throws no Exception
-    removeLast() throws no Exception
-    remove(A) throws no Exception
+    removeFirst() returns A
+    removeLast() returns A
+    remove(A) returns A
     remove(B) throws NoSuchElementException
     remove(-1) throws IndexOutOfBoundsException
-    remove(0) throws no Exception
+    remove(0) returns A
     set(-1, B) throws IndexOutOfBoundsException
     set(0, B) throws no Exception
     set(1, B) throws IndexOutOfBoundsException
@@ -376,13 +376,13 @@ Define tests for at least 21 change scenarios, in addition to the 3 given as exa
     add(-1, C) throws IndexOutOfBoundsException
     add(0, C) throws no Exception
     add(1, C) throws no Exception
-    removeFirst() throws no Exception
-    removeLast() throws no Exception
-    remove(B) throws no Exception
+    removeFirst() return B
+    removeLast() return B
+    remove(B) returns B
     remove(A) throws NoSuchElementException
     remove(C) throws NoSuchElementException
     remove(-1) throws IndexOutOfBoundsException
-    remove(0) throws no Exception
+    remove(0) returns B
     set(-1, C) throws IndexOutOfBoundsException
     set(0, C) throws no Exception
     set(1, C) throws IndexOutOfBoundsException
@@ -419,13 +419,13 @@ Define tests for at least 21 change scenarios, in addition to the 3 given as exa
     add(-1, C) throws IndexOutOfBoundsException
     add(0, C) throws no Exception
     add(1, C) throws no Exception
-    removeFirst() throws no Exception
-    removeLast() throws no Exception
-    remove(B) throws no Exception
+    removeFirst() returns B
+    removeLast() returns B
+    remove(B) returns B
     remove(A) throws NoSuchElementException
     remove(C) throws NoSuchElementException
     remove(-1) throws IndexOutOfBoundsException
-    remove(0) throws no Exception
+    remove(0) returns B
     set(-1, C) throws IndexOutOfBoundsException
     set(0, C) throws no Exception
     set(1, C) throws IndexOutOfBoundsException
@@ -454,12 +454,12 @@ Define tests for at least 21 change scenarios, in addition to the 3 given as exa
     add(-1, B) throws IndexOutOfBoundsException
     add(0, B) throws no Exception
     add(1, B) throws no Exception
-    removeFirst() throws no Exception
-    removeLast() throws no Exception
-    remove(A) throws no Exception
+    removeFirst() returns A
+    removeLast() returns A
+    remove(A) returns A
     remove(B) throws NoSuchElementException
     remove(-1) throws IndexOutOfBoundsException
-    remove(0) throws no Exception
+    remove(0) returns A
     set(-1, B) throws IndexOutOfBoundsException
     set(0, B) throws no Exception
     set(1, B) throws IndexOutOfBoundsException
@@ -488,13 +488,13 @@ Define tests for at least 21 change scenarios, in addition to the 3 given as exa
     add(-1, C) throws IndexOutOfBoundsException
     add(0, C) throws no Exception
     add(1, C) throws no Exception
-    removeFirst() throws no Exception
-    removeLast() throws no Exception
-    remove(B) throws no Exception
+    removeFirst() returns B
+    removeLast() returns B
+    remove(B) returns B
     remove(A) throws NoSuchElementException
     remove(C) throws NoSuchElementException
     remove(-1) throws IndexOutOfBoundsException
-    remove(0) throws no Exception
+    remove(0) returns B
     set(-1, C) throws IndexOutOfBoundsException
     set(0, C) throws no Exception
     set(1, C) throws IndexOutOfBoundsException
@@ -523,12 +523,12 @@ Define tests for at least 21 change scenarios, in addition to the 3 given as exa
     add(-1, B) throws IndexOutOfBoundsException
     add(0, B) throws no Exception
     add(1, B) throws no Exception
-    removeFirst() throws no Exception
-    removeLast() throws no Exception
-    remove(A) throws no Exception
+    removeFirst() returns A
+    removeLast() returns A
+    remove(A) returns A
     remove(B) throws NoSuchElementException
     remove(-1) throws IndexOutOfBoundsException
-    remove(0) throws no Exception
+    remove(0) returns A
     set(-1, B) throws IndexOutOfBoundsException
     set(0, B) throws no Exception
     set(1, B) throws IndexOutOfBoundsException
@@ -557,13 +557,13 @@ Define tests for at least 21 change scenarios, in addition to the 3 given as exa
     add(-1, C) throws IndexOutOfBoundsException
     add(0, C) throws no Exception
     add(1, C) throws no Exception
-    removeFirst() throws no Exception
-    removeLast() throws no Exception
-    remove(B) throws no Exception
+    removeFirst() returns B
+    removeLast() returns B
+    remove(B) returns B
     remove(A) throws NoSuchElementException
     remove(C) throws NoSuchElementException
     remove(-1) throws IndexOutOfBoundsException
-    remove(0) throws no Exception
+    remove(0) returns B
     set(-1, C) throws IndexOutOfBoundsException
     set(0, C) throws no Exception
     set(1, C) throws IndexOutOfBoundsException
@@ -592,14 +592,14 @@ Define tests for at least 21 change scenarios, in addition to the 3 given as exa
     add(-1, B) throws IndexOutOfBoundsException
     add(0, B) throws no Exception
     add(1, B) throws no Exception
-    removeFirst() throws no Exception
-    removeLast() throws no Exception
+    removeFirst() returns A
+    removeLast() returns A
     remove(A) throws no Exception
     remove(B) throws NoSuchElementException
     remove(-1) throws IndexOutOfBoundsException
-    remove(0) throws no Exception
+    remove(0) returns A
     set(-1, B) throws IndexOutOfBoundsException
-    set(0, B) throws no Exception
+    set(0, B) returns A
     set(1, B) throws IndexOutOfBoundsException
     get(-1) throws IndexOutOfBoundsException
     get(0) returns A
