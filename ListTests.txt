@@ -50,7 +50,7 @@ Define tests for at least 21 change scenarios, in addition to the 3 given as exa
     set(0, B) throws no Exception
     set(1, B) throws IndexOutOfBoundsException
     get(-1) throws IndexOutOfBoundsException
-    get(0) throws A
+    get(0) returns A
     get(1) throws IndexOutOfBoundsException
     indexOf(A) returns 0
     indexOf(B) returns -1
@@ -84,7 +84,7 @@ Define tests for at least 21 change scenarios, in addition to the 3 given as exa
     set(0, B) throws no Exception
     set(1, B) throws IndexOutOfBoundsException
     get(-1) throws IndexOutOfBoundsException
-    get(0) throws A
+    get(0) returns A
     get(1) throws IndexOutOfBoundsException
     indexOf(A) returns 0
     indexOf(B) returns -1
@@ -118,7 +118,7 @@ Define tests for at least 21 change scenarios, in addition to the 3 given as exa
     set(0, B) throws no Exception
     set(1, B) throws IndexOutOfBoundsException
     get(-1) throws IndexOutOfBoundsException
-    get(0) throws A
+    get(0) returns A
     get(1) throws IndexOutOfBoundsException
     indexOf(A) returns 0
     indexOf(B) returns -1
@@ -152,7 +152,7 @@ Define tests for at least 21 change scenarios, in addition to the 3 given as exa
     set(0, B) throws no Exception
     set(1, B) throws IndexOutOfBoundsException
     get(-1) throws IndexOutOfBoundsException
-    get(0) throws A
+    get(0) returns A
     get(1) throws IndexOutOfBoundsException
     indexOf(A) returns 0
     indexOf(B) returns -1
