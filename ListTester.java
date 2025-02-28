@@ -146,6 +146,8 @@ public class ListTester {
 		testEmptyList(newList, "newList");
 		//empty to 1-element list
 		testSingleElementList(emptyList_addToFrontA_A, "emptyList_addToFrontA_A", LIST_A, STRING_A);
+		testSingleElementList(emptyList_addA_A, "emptyList_addA_A", LIST_A, STRING_A); 
+
 		//1-element to empty list
 		//1-element to 2-element
 		testTwoElementList(A_addToFrontB_BA, "A_addToFrontB_BA", LIST_BA, STRING_BA);
@@ -205,6 +207,13 @@ public class ListTester {
 	//  just make sure each scenario building method has a corresponding Scenario 
 	//  assignment statement as in these examples. 
 	private Scenario<Integer> newList = () -> newList();
+
+	private IndexedUnsortedList<Integer> emptyList_addA_A() {
+		IndexedUnsortedList<Integer> list = newList(); 
+		list.add(ELEMENT_A);
+		return list;
+	}
+	private Scenario<Integer> emptyList_addA_A = () -> emptyList_addA_A();
 
 	/** Scenario: empty list -> addToFront(A) -> [A] 
 	 * @return [A] after addToFront(A)
