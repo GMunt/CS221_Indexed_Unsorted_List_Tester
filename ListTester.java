@@ -298,7 +298,7 @@ public class ListTester {
 	}
 	private Scenario<Integer> A_addB_AB = () -> A_addB_AB();
 
-	/** Scenario: [A] -> add(0,B) -> [A,B] 
+	/** Scenario: [A] -> add(0,B) -> [B,A] 
 	 * @return [A,B] after add(0,B)
 	 */
 	private IndexedUnsortedList<Integer> A_addAtIndexZeroB_BA() {
