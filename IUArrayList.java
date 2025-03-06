@@ -1,5 +1,6 @@
 import java.lang.reflect.Array;
 import java.util.Arrays;
+import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.ListIterator;
 import java.util.NoSuchElementException;
@@ -10,8 +11,9 @@ import java.util.NoSuchElementException;
  */
 public class IUArrayList<E> implements IndexedUnsortedList<E> {
 
-    E[] array;
-    int rear;
+    private E[] array;
+    private int rear;
+    private int modCount;
     final static int DEFAULT_CAPACITY = 10;
 
     /**
@@ -28,6 +30,7 @@ public class IUArrayList<E> implements IndexedUnsortedList<E> {
     public IUArrayList(int size) {
         array = (E[])(new Object[size]);
         rear = 0;
+        modCount = 0;
     }
 
     /**
@@ -48,6 +51,7 @@ public class IUArrayList<E> implements IndexedUnsortedList<E> {
         }
         array[0] = element;
         rear++;
+        modCount++;
     }
 
     @Override
@@ -55,11 +59,13 @@ public class IUArrayList<E> implements IndexedUnsortedList<E> {
         expandIfNecessary();
         array[rear] = element;
         rear++;
+        modCount++;
     }
 
     @Override
     public void add(E element) {
         addToRear(element);
+        modCount++;
     }
 
     @Override
@@ -77,6 +83,7 @@ public class IUArrayList<E> implements IndexedUnsortedList<E> {
             }
             array[index] = element;
             rear++;
+            modCount++;
         }
         else {
             throw new IndexOutOfBoundsException();
@@ -122,6 +129,7 @@ public class IUArrayList<E> implements IndexedUnsortedList<E> {
     public void set(int index, E element) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'set'");
+        // modCount++;
     }
 
     @Override
@@ -190,4 +198,39 @@ public class IUArrayList<E> implements IndexedUnsortedList<E> {
         throw new UnsupportedOperationException("Unimplemented method 'listIterator'");
     }
     
+    /**
+     * Basic iterator for IUArrayList
+     */
+    private class ALIterator implements Iterator<E> {
+        private int nextIndex;
+        private int iterModCount = modCount;
+
+        // Create a new Iterator in front of the first element 
+        public ALIterator() {
+            nextIndex = 0;
+        }
+
+        @Override
+        public boolean hasNext() {
+            if (iterModCount != modCount) {
+                throw new ConcurrentModificationException();
+            }
+            return nextIndex < rear;
+        }
+
+        @Override
+        public E next() {
+            if (!hasNext()) {
+                throw new NoSuchElementException();
+            }
+            nextIndex++; // Must increment and then remove 
+            return array[nextIndex - 1];
+        }
+
+        // Doesn't autofill method because of sad history :(
+        @Override 
+        public void remove() {
+
+        }
+    }
 }

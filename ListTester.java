@@ -1087,6 +1087,18 @@ public class ListTester {
 		return it;
 	}
 
+/** Helper for testing iterators. Return an Iterator that has been advanced numCallsToNext times.
+	 * @param previousInterator 
+	 * @param numCallsToNext
+	 * @return Iterator for given list, after numCallsToNext
+	 */
+	private Iterator<Integer> iterAfterNext(Iterator<Integer> previousIterator, int numCallsToNext) {
+		for (int i = 0; i < numCallsToNext; i++) {
+			previousIterator.next();
+		}
+		return previousIterator;
+	}
+
 	/** Helper for testing iterators. Return an Iterator that has had remove() called once.
 	 * @param iterator
 	 * @return same Iterator following a call to remove()
