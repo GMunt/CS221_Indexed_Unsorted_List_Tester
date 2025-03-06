@@ -6,8 +6,10 @@ import java.util.ListIterator;
 import java.util.NoSuchElementException;
 
 /**
- * 
+ * This class will create a custom indexed unsorted array list
+ * allowing for all of the required methods
  * @author GMunt
+ * @version Spring 2025
  */
 public class IUArrayList<E> implements IndexedUnsortedList<E> {
 
@@ -34,7 +36,7 @@ public class IUArrayList<E> implements IndexedUnsortedList<E> {
     }
 
     /**
-     * 
+     * Helper method to double the size of array whenever called
      */
     private void expandIfNecessary() {
         if (rear >= array.length) {
@@ -69,12 +71,6 @@ public class IUArrayList<E> implements IndexedUnsortedList<E> {
     }
 
     @Override
-    public void addAfter(E element, E target) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'addAfter'");
-    }
-
-    @Override
     public void add(int index, E element) {
         if (index <= rear && index > -1) {
             expandIfNecessary();
@@ -91,15 +87,18 @@ public class IUArrayList<E> implements IndexedUnsortedList<E> {
     }
 
     @Override
+    public void addAfter(E element, E target) {
+        add(indexOf(target), element);
+    }
+
+    @Override
     public E removeFirst() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'removeFirst'");
+        return remove(array[0]);
     }
 
     @Override
     public E removeLast() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'removeLast'");
+        return remove(array[rear - 1]);
     }
 
     @Override
@@ -116,20 +115,23 @@ public class IUArrayList<E> implements IndexedUnsortedList<E> {
         }
         array[rear - 1] = null;
         rear--;
+        modCount++;
         return retVal;
     }
 
     @Override
     public E remove(int index) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'remove'");
+        return remove(array[index]);
     }
 
     @Override
     public void set(int index, E element) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'set'");
-        // modCount++;
+        // Check if index is out of bounds
+        if (index < 0 || index >= rear) {
+            throw new IndexOutOfBoundsException();
+        }
+        array[index] = element;
+        modCount++;
     }
 
     @Override
@@ -182,8 +184,7 @@ public class IUArrayList<E> implements IndexedUnsortedList<E> {
 
     @Override
     public Iterator<E> iterator() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'iterator'");
+        return new ALIterator();
     }
 
     @Override
@@ -205,7 +206,9 @@ public class IUArrayList<E> implements IndexedUnsortedList<E> {
         private int nextIndex;
         private int iterModCount = modCount;
 
-        // Create a new Iterator in front of the first element 
+        /**
+         * Create a new Iterator in front of the first element 
+         */
         public ALIterator() {
             nextIndex = 0;
         }
@@ -223,14 +226,29 @@ public class IUArrayList<E> implements IndexedUnsortedList<E> {
             if (!hasNext()) {
                 throw new NoSuchElementException();
             }
-            nextIndex++; // Must increment and then remove 
+            nextIndex++; // Must increment and then return
             return array[nextIndex - 1];
         }
 
         // Doesn't autofill method because of sad history :(
         @Override 
         public void remove() {
-
+            if (iterModCount != modCount) {
+                throw new ConcurrentModificationException();
+            }
+            if (nextIndex == 0) {
+                throw new IllegalStateException();
+            }
+            // Shift everything from index on to the left
+            for (int i = nextIndex; i < rear - 1; i++) {
+                array[i] = array[i + 1];
+            }
+            array[nextIndex - 1] = null;
+            rear--;
+            nextIndex--;
+            iterModCount++;
+            modCount++;
+            // TODO Go over in class and fill this in (might need a boolean for if the next() has been called)
         }
     }
 }
