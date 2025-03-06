@@ -138,7 +138,9 @@ public class ListTester {
 	private void runTests() {
 		//Possible list contents after a scenario has been set up
 		Integer[] LIST_A = {ELEMENT_A};
+		Integer[] LIST_B = {ELEMENT_B};
 		String STRING_A = "A";
+		String STRING_B = "B";
 		Integer[] LIST_AB = {ELEMENT_A, ELEMENT_B};
 		Integer[] LIST_BA = {ELEMENT_B, ELEMENT_A};
 		String STRING_AB = "AB";
@@ -152,6 +154,10 @@ public class ListTester {
 		testSingleElementList(emptyList_addA_A, "emptyList_addA_A", LIST_A, STRING_A); 
 		testSingleElementList(emptyList_addAtIndexZeroA_A, "emptyList_addAtIndexZeroA_A", LIST_A, STRING_A); 
 		//1-element to empty list
+		testEmptyList(A_removeFirst_emptyList, "A_removeFirst_emptyList");
+		testEmptyList(A_removeLast_emptyList, "A_removeLast_emptyList");
+		testEmptyList(A_removeA_emptyList, "A_removeA_emptyList");
+		testEmptyList(A_removeIndexZero_emptyList, "A_removeIndexZero_emptyList");
 		//1-element to 2-element
 		testTwoElementList(A_addToFrontB_BA, "A_addToFrontB_BA", LIST_BA, STRING_BA);
 		testTwoElementList(A_addToRearB_AB, "A_addToRearB_AB", LIST_AB, STRING_AB);
@@ -160,6 +166,7 @@ public class ListTester {
 		testTwoElementList(A_addAtIndexZeroB_BA, "A_addAtIndexZeroB_BA", LIST_BA, STRING_BA);
 		testTwoElementList(A_addAtIndexOneB_AB, "A_addAtIndexOneB_AB", LIST_AB, STRING_AB);
 		//1-element to changed 1-element via set()
+		testSingleElementList(A_setatIndexZeroB_B, "A_setatIndexZeroB_B", LIST_B, STRING_B);
 		//2-element to 1-element
 		//2-element to 3-element
 		//2-element to changed 2-element via set()
@@ -215,6 +222,46 @@ public class ListTester {
 	//  just make sure each scenario building method has a corresponding Scenario 
 	//  assignment statement as in these examples. 
 	private Scenario<Integer> newList = () -> newList();
+	
+	/** Scenario: [A] -> removeFirst() -> [] 
+	 * @return [] after removeFirst()
+	 */
+	private IndexedUnsortedList<Integer> A_removeFirst_emptyList() {
+		IndexedUnsortedList<Integer> list = emptyList_addA_A(); 
+		list.remove(ELEMENT_A);
+		return list;
+	}
+	private Scenario<Integer> A_removeFirst_emptyList = () -> A_removeFirst_emptyList();
+
+	/** Scenario: [A] -> removeLast() -> [] 
+	 * @return [] after removeLast()
+	 */
+	private IndexedUnsortedList<Integer> A_removeLast_emptyList() {
+		IndexedUnsortedList<Integer> list = emptyList_addAtIndexZeroA_A(); 
+		list.remove(0);
+		return list;
+	}
+	private Scenario<Integer> A_removeLast_emptyList = () -> A_removeLast_emptyList();
+
+	/** Scenario: [A] -> remove(A) -> [] 
+	 * @return [] after remove(A)
+	 */
+	private IndexedUnsortedList<Integer> A_removeA_emptyList() {
+		IndexedUnsortedList<Integer> list = emptyList_addToFrontA_A(); 
+		list.removeFirst();
+		return list;
+	}
+	private Scenario<Integer> A_removeA_emptyList = () -> A_removeA_emptyList();
+
+	/** Scenario: [A] -> remove(A) -> [] 
+	 * @return [] after remove(A)
+	 */
+	private IndexedUnsortedList<Integer> A_removeIndexZero_emptyList() {
+		IndexedUnsortedList<Integer> list = emptyList_addToRearA_A(); 
+		list.removeLast();
+		return list;
+	}
+	private Scenario<Integer> A_removeIndexZero_emptyList = () -> A_removeIndexZero_emptyList();
 
 	/** Scenario: empty list -> addToFront(A) -> [A] 
 	 * @return [A] after addToFront(A)
@@ -247,6 +294,7 @@ public class ListTester {
 		return list;
 	}
 	private Scenario<Integer> emptyList_addA_A = () -> emptyList_addA_A();
+	
 	/**
 	 * Scenario: empty list -> add(0,A) -> [A]
 	 * @return [A] after add(0,A)
@@ -257,6 +305,17 @@ public class ListTester {
 		return list;
 	}
 	private Scenario<Integer> emptyList_addAtIndexZeroA_A = () -> emptyList_addAtIndexZeroA_A();
+
+	/**
+	 * Scenario: [A] -> set(0,B) -> [B]
+	 * @return [B] after set(0,B)
+	 */
+	private IndexedUnsortedList<Integer> A_setatIndexZeroB_B() {
+		IndexedUnsortedList<Integer> list = emptyList_addA_A(); 
+		list.set(0,ELEMENT_B);
+		return list;
+	}
+	private Scenario<Integer> A_setatIndexZeroB_B = () -> A_setatIndexZeroB_B();
 
 	/** Scenario: [A] -> addToFront(B) -> [B,A] 
 	 * @return [B,A] after addToFront(B)
@@ -317,6 +376,7 @@ public class ListTester {
 		return list;
 	}
 	private Scenario<Integer> A_addAtIndexOneB_AB = () -> A_addAtIndexOneB_AB();
+
 	/////////////////////////////////
 	//XXX Tests for 0-element list
 	/////////////////////////////////
