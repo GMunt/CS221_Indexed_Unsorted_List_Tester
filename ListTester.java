@@ -142,11 +142,15 @@ public class ListTester {
 		String STRING_A = "A";
 		String STRING_B = "B";
 		Integer[] LIST_AB = {ELEMENT_A, ELEMENT_B};
+		Integer[] LIST_AC = {ELEMENT_A, ELEMENT_C};
+		Integer[] LIST_BC = {ELEMENT_B, ELEMENT_C};
 		Integer[] LIST_BA = {ELEMENT_B, ELEMENT_A};
 		Integer[] LIST_ABC = {ELEMENT_A, ELEMENT_B, ELEMENT_C};
 		Integer[] LIST_CAB = {ELEMENT_C, ELEMENT_A, ELEMENT_B};
 		Integer[] LIST_ACB = {ELEMENT_A, ELEMENT_C, ELEMENT_B};
 		String STRING_AB = "AB";
+		String STRING_AC = "AC";
+		String STRING_BC = "BC";
 		String STRING_BA = "BA";
 		String STRING_ABC = "ABC";
 		String STRING_CAB = "CAB";
@@ -159,6 +163,8 @@ public class ListTester {
 		testSingleElementList(emptyList_addToRearA_A, "emptyList_addToRearA_A", LIST_A, STRING_A); 
 		testSingleElementList(emptyList_addA_A, "emptyList_addA_A", LIST_A, STRING_A); 
 		testSingleElementList(emptyList_addAtIndexZeroA_A, "emptyList_addAtIndexZeroA_A", LIST_A, STRING_A); 
+		testSingleElementList(AB_iterRemoveAfterNextA_B, "AB_IterRemoveA_B", LIST_B, STRING_B);
+		testSingleElementList(AB_IterRemoveAfterNextNextB_A, "AB_IterRemoveB_A", LIST_A, STRING_A);
 		//1-element to empty list
 		testEmptyList(A_removeFirst_emptyList, "A_removeFirst_emptyList");
 		testEmptyList(A_removeLast_emptyList, "A_removeLast_emptyList");
@@ -186,6 +192,9 @@ public class ListTester {
 		testThreeElementList(AB_addAtIndexTwoC_ABC, "AB_addAtIndexTwoC_ABC", LIST_ABC, STRING_ABC);
 		//2-element to changed 2-element via set()
 		//3-element to 2-element
+		testTwoElementList(ABC_iterRemoveAfterNextA_BC, "ABC_iterRemoveAfterNextA_BC", LIST_BC, STRING_BC);
+		testTwoElementList(ABC_iterRemoveAfterNextNextB_AC, "ABC_iterRemoveAfterNextNextB_AC", LIST_AC, STRING_AC);
+		testTwoElementList(ABC_iterRemoveAfterNextNextNextC_AB, "ABC_iterRemoveAfterNextNextNextC_AB", LIST_AB, STRING_AB);
 		//3-element to changed 3-element via set()
 		//Iterator concurrency tests
 		if (SUPPORTS_LIST_ITERATOR) {
@@ -482,6 +491,70 @@ public class ListTester {
 		return list;
 	}
 	private Scenario<Integer> A_iterRemoveAfterNextA_emptyList = () -> A_iterRemoveAfterNextA_emptyList();
+
+	/** Scenario: [A,B] -> iteratorRemoveAfterNextA -> [B] 
+	 * @return [B] after iteratorRemoveAfterNextA
+	 */
+	private IndexedUnsortedList<Integer> AB_iterRemoveAfterNextA_B() {
+		IndexedUnsortedList<Integer> list = A_addAtIndexOneB_AB(); 
+		Iterator<Integer> it = list.iterator();
+		it.next();
+		it.remove();
+		return list;
+	}
+	private Scenario<Integer> AB_iterRemoveAfterNextA_B = () -> AB_iterRemoveAfterNextA_B();
+	
+	/** Scenario: [A,B] -> iteratorRemoveAfterNextNextB -> [A] 
+	 * @return [A] after iteratorRemoveAfterNextB
+	 */
+	private IndexedUnsortedList<Integer> AB_IterRemoveAfterNextNextB_A() {
+		IndexedUnsortedList<Integer> list = A_addBAfterA_AB(); 
+		Iterator<Integer> it = list.iterator();
+		it.next();
+		it.next();
+		it.remove();
+		return list;
+	}
+	private Scenario<Integer> AB_IterRemoveAfterNextNextB_A = () -> AB_IterRemoveAfterNextNextB_A();
+
+	/** Scenario: [A,B,C] -> iteratorRemoveAfterNextA -> [A,B] 
+	 * @return [A,B] after iteratorRemoveAfterNextA
+	 */
+	private IndexedUnsortedList<Integer> ABC_iterRemoveAfterNextA_BC() {
+		IndexedUnsortedList<Integer> list = AB_addAtIndexTwoC_ABC(); 
+		Iterator<Integer> it = list.iterator();
+		it.next();
+		it.remove();
+		return list;
+	}
+	private Scenario<Integer> ABC_iterRemoveAfterNextA_BC = () -> ABC_iterRemoveAfterNextA_BC();
+
+	/** Scenario: [A,B,C] -> iteratorRemoveAfterNextNextB -> [A,C] 
+	 * @return [A,C] after iteratorRemoveAfterNextNextB
+	 */
+	private IndexedUnsortedList<Integer> ABC_iterRemoveAfterNextNextB_AC() {
+		IndexedUnsortedList<Integer> list = AB_addCAfterB_ABC(); 
+		Iterator<Integer> it = list.iterator();
+		it.next();
+		it.next();
+		it.remove();
+		return list;
+	}
+	private Scenario<Integer> ABC_iterRemoveAfterNextNextB_AC = () -> ABC_iterRemoveAfterNextNextB_AC();
+
+	/** Scenario: [A,B,C] -> iteratorRemoveAfterNextNextNextB -> [A,B] 
+	 * @return [A,B] after iteratorRemoveAfterNextNextNextB
+	 */
+	private IndexedUnsortedList<Integer> ABC_iterRemoveAfterNextNextNextC_AB() {
+		IndexedUnsortedList<Integer> list = AB_addToRearC_ABC();
+		Iterator<Integer> it = list.iterator();
+		it.next();
+		it.next();
+		it.next();
+		it.remove();
+		return list;
+	}
+	private Scenario<Integer> ABC_iterRemoveAfterNextNextNextC_AB = () -> ABC_iterRemoveAfterNextNextNextC_AB();
 
 	/////////////////////////////////
 	//XXX Tests for 0-element list
