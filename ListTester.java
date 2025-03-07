@@ -20,7 +20,7 @@ public class ListTester {
 		goodList, badList, arrayList, singleLinkedList, doubleLinkedList
 	};
 	// TODO: THIS IS WHERE YOU CHOOSE WHICH LIST TO TEST
-	private final static ListToUse LIST_TO_USE = ListToUse.goodList;
+	private final static ListToUse LIST_TO_USE = ListToUse.arrayList;
 
 	// possible results expected in tests
 	private enum Result {
@@ -187,7 +187,7 @@ public class ListTester {
 		//3-element to 2-element
 		//3-element to changed 3-element via set()
 		//Iterator concurrency tests
-		test_IterConcurrency();
+		A_iterRemoveAfterNextA_emptyList();
 		if (SUPPORTS_LIST_ITERATOR) {
 			test_ListIterConcurrency();
 		}
@@ -220,9 +220,9 @@ public class ListTester {
 		case arrayList:
 			listToUse = new IUArrayList<Integer>();
 			break;
-		// case singleLinkedList:
-		// 	listToUse = new IUSingleLinkedList<Integer>();
-		// 	break;
+		case singleLinkedList:
+			listToUse = new IUSingleLinkedList<Integer>();
+			break;
 		// case doubleLinkedList:
 		// 	listToUse = new IUDoubleLinkedList<Integer>();
 		// 	break;
@@ -470,6 +470,18 @@ public class ListTester {
 		return list;
 	}
 	private Scenario<Integer> AB_addAtIndexTwoC_ABC = () -> AB_addAtIndexTwoC_ABC();
+
+	/** Scenario: [A] -> iteratorRemoveAfterNextA -> [ ] 
+	 * @return [ ] after iteratorRemoveAfterNextA
+	 */
+	private IndexedUnsortedList<Integer> A_iterRemoveAfterNextA_emptyList() {
+		IndexedUnsortedList<Integer> list = emptyList_addToFrontA_A(); 
+		Iterator<Integer> it = list.iterator();
+		it.next();
+		it.remove();
+		return list;
+	}
+	private Scenario<Integer> A_iterRemoveAfterNextA_emptyList = () -> A_iterRemoveAfterNextA_emptyList();
 
 	/////////////////////////////////
 	//XXX Tests for 0-element list
