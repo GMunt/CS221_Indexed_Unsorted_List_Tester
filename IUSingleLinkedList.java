@@ -1,5 +1,6 @@
 import java.util.Iterator;
 import java.util.ListIterator;
+import java.util.NoSuchElementException;
 
 /**
  * Single-linked-Node-based implementation of IndexedUnsortedList
@@ -17,20 +18,31 @@ public class IUSingleLinkedList<E> implements IndexedUnsortedList<E> {
 
     @Override
     public void addToFront(E element) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'addToFront'");
+        Node<E> newNode = new Node<E>(element); //Could also do (element, head) due to other constructor 
+        if (isEmpty()) {
+            tail = newNode;
+        }
+        newNode.setNextNode(head);
+        head = newNode;
+        size++;
     }
 
     @Override
     public void addToRear(E element) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'addToRear'");
+        Node<E> newNode = new Node<E>(element);
+        if (isEmpty()) {
+            head = newNode;
+        }
+        else {
+            tail.setNextNode(newNode);
+        }
+        tail = newNode;
+        size++;
     }
 
     @Override
     public void add(E element) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'add'");
+        addToRear(element);
     }
 
     @Override
@@ -76,45 +88,67 @@ public class IUSingleLinkedList<E> implements IndexedUnsortedList<E> {
     }
 
     @Override
-    public E get(int index) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'get'");
+    public E get(int index) { // n factor now in SLL vs AL single factor
+        if (index < 0 || index >=  size) {
+            throw new IndexOutOfBoundsException();
+        }
+        Node<E> currentNode = head;
+        for (int i = 0; i < index; i++) {
+            currentNode = currentNode.getNextNode();
+        }
+        return currentNode.getElement();
     }
 
     @Override
     public int indexOf(E element) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'indexOf'");
+        Node<E> currentNode = head;
+        int currentIndex = 0;
+        boolean foundElement = false;
+        while(currentNode != null && !foundElement) {
+            if (currentNode.getElement().equals(element)) {
+                foundElement = true;
+            }
+            else {
+                currentNode = currentNode.getNextNode();
+                currentIndex++;
+            }    
+        }
+        if (!foundElement) {
+            currentIndex = -1;
+        }
+        return currentIndex;
     }
 
     @Override
     public E first() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'first'");
+        if (isEmpty()) {
+            throw new NoSuchElementException();
+        }
+        return head.getElement();
     }
 
     @Override
     public E last() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'last'");
+        if (isEmpty()) {
+            throw new NoSuchElementException();
+        }
+        return tail.getElement();
     }
 
     @Override
     public boolean contains(E target) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'contains'");
+        return indexOf(target) > -1;
     }
 
     @Override
     public boolean isEmpty() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'isEmpty'");
+        return size == 0; //best clarity 
+        // return head == null; //paranoia way 
     }
 
     @Override
     public int size() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'size'");
+        return size;
     }
 
     @Override

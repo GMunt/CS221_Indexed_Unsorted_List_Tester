@@ -9,7 +9,6 @@ import java.util.NoSuchElementException;
  * allowing for all of the required methods
  * @author GMunt
  * @version Spring 2025
- * 
  * @param <E> type to store
  */
 public class IUArrayList<E> implements IndexedUnsortedList<E> {
@@ -229,18 +228,30 @@ public class IUArrayList<E> implements IndexedUnsortedList<E> {
     // Added to pass toString() tests
     @Override
     public String toString() {
-        E[] copyArray = (E[])(new Object[rear]);
-        String resString = "[";
+        // String resString = "[";
 
-        for (int i = 0; i < rear; i++) {
-            copyArray[i] = array[i];
-            resString += copyArray[i]; 
-            if (i < rear - 1) {
-                resString += ", ";
-            }
+        // for (int i = 0; i < rear; i++) {
+        //     resString += array[i]; 
+        //     if (i < rear - 1) {
+        //         resString += ", ";
+        //     }
+        // }
+        // resString += "]";
+
+        // Commenting out because adding to string in a loop = n^2
+
+        StringBuilder resString = new StringBuilder();
+        resString.append("[");
+        for (E element : this) {
+            resString.append(element.toString());
+            resString.append(", ");
         }
-        resString += "]";
-        return resString;
+        if (rear > 0) {
+            resString.delete(resString.length() - 2, resString.length());
+        }
+        resString.append("]");
+
+        return resString.toString();
     }
 
     /**
