@@ -1,3 +1,4 @@
+import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.ListIterator;
 import java.util.NoSuchElementException;
@@ -10,10 +11,12 @@ public class IUSingleLinkedList<E> implements IndexedUnsortedList<E> {
     private Node<E> head;
     private Node<E> tail;
     private int size;
+    private int modCount;
 
     public IUSingleLinkedList() {
         head = tail = null;
         size = 0;
+        modCount = 0;
     }
 
     @Override
@@ -25,6 +28,7 @@ public class IUSingleLinkedList<E> implements IndexedUnsortedList<E> {
         newNode.setNextNode(head);
         head = newNode;
         size++;
+        modCount++;
     }
 
     @Override
@@ -37,6 +41,7 @@ public class IUSingleLinkedList<E> implements IndexedUnsortedList<E> {
             tail.setNextNode(newNode);
         }
         tail = newNode;
+        modCount++;
         size++;
     }
 
@@ -59,14 +64,39 @@ public class IUSingleLinkedList<E> implements IndexedUnsortedList<E> {
 
     @Override
     public E removeFirst() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'removeFirst'");
+        if (isEmpty()) {
+            throw new NoSuchElementException();
+        }
+        E returnElement = head.getElement();
+        head = head.getNextNode();
+        if (head == null) { //Check for single element case, use this or size == 1 
+            tail = null;
+        }
+        size--;
+        modCount++;
+        return returnElement;
     }
 
     @Override
     public E removeLast() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'removeLast'");
+        if (isEmpty()) {
+            throw new NoSuchElementException();
+        }
+        E retVal = tail.getElement();
+        if (head == tail) { // or size == 1
+            head = tail = null;
+        }
+        else {
+            Node<E> newTailNode = head;
+            while (newTailNode.getNextNode() != tail) {
+                newTailNode = newTailNode.getNextNode();
+            }
+            tail = newTailNode;
+            newTailNode.setElement(null);
+        }
+        size--;
+        modCount++;
+        return retVal;
     }
 
     @Override
@@ -153,8 +183,7 @@ public class IUSingleLinkedList<E> implements IndexedUnsortedList<E> {
 
     @Override
     public Iterator<E> iterator() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'iterator'");
+        return new SLLIterator();
     }
 
     @Override
@@ -169,4 +198,41 @@ public class IUSingleLinkedList<E> implements IndexedUnsortedList<E> {
         throw new UnsupportedOperationException("Unimplemented method 'listIterator'");
     }
     
+    /**
+     * Basic Iterattor for IUSingleLinkedList
+     */
+    private class SLLIterator implements Iterator<E> {
+        private Node<E> nextNode;
+        private int iterModCount;
+
+        /**
+         * Initialize Iterator before first element
+         */
+        public SLLIterator() {
+            nextNode = head;
+            iterModCount = modCount;
+        }
+        @Override
+        public boolean hasNext() {
+            if (iterModCount != modCount) {
+                throw new ConcurrentModificationException();
+            }
+            return nextNode != null;
+        }
+
+        @Override
+        public E next() {
+            if (!hasNext()) {
+                throw new NoSuchElementException();
+            }
+            E retVal = nextNode.getElement();
+            nextNode = nextNode.getNextNode();
+            return retVal;
+        }
+
+        @Override
+        public void remove() {
+            //TODO after break 
+        }
+    }
 }
