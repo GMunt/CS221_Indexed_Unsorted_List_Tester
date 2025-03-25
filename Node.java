@@ -5,6 +5,7 @@
 public class Node<E> {
     private E element; 
     private Node<E> nextNode;
+    private Node<E> previousNode;
 
     /**
      * Basic constructor to make Node objects from a known element
@@ -13,6 +14,7 @@ public class Node<E> {
     public Node(E element) {
         this.element = element;
         nextNode = null;
+        previousNode = null;
     }
 
     /**
@@ -56,5 +58,26 @@ public class Node<E> {
      */
     public void setNextNode(Node<E> nextNode) {
         this.nextNode = nextNode;
+    }
+    
+    /**
+     * Return the previous Node object
+     * @return the previous Node object
+     */
+    public Node<E> getPreviousNode() {
+        return previousNode;
+    }
+
+    /**
+     * Set the previous Node object
+     * @param previousNode the previous Node object to set
+     */
+    public void setPreviousNode(Node<E> previousNode) {
+        this.previousNode = previousNode;
+    }
+
+    @Override
+    public String toString() {
+        return "Node: element ->" + element.toString() + ", nextNode=" + nextNode + ", previousNode=" + previousNode;
     }
 }

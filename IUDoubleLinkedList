@@ -1,0 +1,12 @@
+/**
+ * Double-linked-node-based implementation of IndexedUnsortedList
+ * @author GMunt
+ * @version Spring 2025
+ */
+public class IUDoubleLinkedList<E> implements IndexedUnsortedList<E> {
+    private Node<E> head;
+    private Node<E> tail;
+    private int size;
+    private int modCount;
+    
+}

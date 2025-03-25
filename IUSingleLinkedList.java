@@ -6,6 +6,7 @@ import java.util.NoSuchElementException;
 /**
  * Single-linked-Node-based implementation of IndexedUnsortedList
  * @author GMunt
+ * @version Spring 2025
  */
 public class IUSingleLinkedList<E> implements IndexedUnsortedList<E> {
     private Node<E> head;
@@ -199,11 +200,12 @@ public class IUSingleLinkedList<E> implements IndexedUnsortedList<E> {
     }
     
     /**
-     * Basic Iterattor for IUSingleLinkedList
+     * Basic Iterator for IUSingleLinkedList
      */
     private class SLLIterator implements Iterator<E> {
         private Node<E> nextNode;
         private int iterModCount;
+        private boolean canRemove; 
 
         /**
          * Initialize Iterator before first element
@@ -211,6 +213,7 @@ public class IUSingleLinkedList<E> implements IndexedUnsortedList<E> {
         public SLLIterator() {
             nextNode = head;
             iterModCount = modCount;
+            canRemove = false;
         }
         @Override
         public boolean hasNext() {
@@ -227,12 +230,42 @@ public class IUSingleLinkedList<E> implements IndexedUnsortedList<E> {
             }
             E retVal = nextNode.getElement();
             nextNode = nextNode.getNextNode();
+            canRemove = true;
             return retVal;
         }
 
         @Override
         public void remove() {
-            //TODO after break 
+            // Checks before modification 
+            if (iterModCount != modCount) {
+                throw new ConcurrentModificationException();
+            }
+            if (!canRemove) {
+                throw new IllegalStateException();
+            }
+            
+            canRemove = false;
+            if (head.getNextNode() == nextNode) { // Removing head (B,^ D)
+                head = nextNode;
+                if (nextNode == null) { // Removing ONLY node: or size==1, head==null 
+                    tail = null;
+                }
+            }
+            else { // General case: removing something deep into the list (A, B,^ C)
+                Node<E> prevPrevNode = head;
+                // Locate the node 2 behind nextNode
+                while (prevPrevNode.getNextNode().getNextNode() != nextNode) {
+                    prevPrevNode = prevPrevNode.getNextNode();
+                }
+                prevPrevNode.setNextNode(nextNode); // Reassign to remove   
+                
+                if (nextNode == null) { // Check to ensure 
+                    tail = prevPrevNode;
+                }             
+            }
+            size--;
+            modCount++;
+            iterModCount++;
         }
     }
 }
