@@ -20,12 +20,25 @@ public class Node<E> {
     /**
      * Additional constructor to make Node objects if you know both the 
      * element and the next Node
-     * @param element the known element to assign Node to 
+     * @param element the known element to assign this Node to 
      * @param nextNode the known Node that should come after
      */
-    public Node(E element, Node nextNode) { // Not totally necessary 
+    public Node(E element, Node<E> nextNode) { // Not totally necessary 
         this.element = element;
         this.nextNode = nextNode;
+    }
+
+    /**
+     * Additional constructor to make double linked list Node objects if you 
+     * know the element, the next Node, and the previous Node
+     * @param element the known element to assign this Node to
+     * @param nextNode the known Node that should come after
+     * @param previousNode the known Node that should come before 
+     */
+    public Node(E element, Node<E> nextNode, Node<E> previousNode) {
+        this.element = element;
+        this.nextNode = nextNode;
+        this.previousNode = previousNode;
     }
 
     /**

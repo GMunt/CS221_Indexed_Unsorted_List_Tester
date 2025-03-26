@@ -53,14 +53,66 @@ public class IUSingleLinkedList<E> implements IndexedUnsortedList<E> {
 
     @Override
     public void addAfter(E element, E target) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'addAfter'");
+        if (isEmpty()) {
+            throw new NoSuchElementException();
+        }
+        Node<E> nodeToAdd = new Node<E>(element);
+        Node<E> currentNode = head;
+        // Traverse through the list until target is found
+        while (currentNode != null && !currentNode.getElement().equals(target)) {
+            currentNode = currentNode.getNextNode();
+        }
+
+        if (currentNode == null) {
+            throw new NoSuchElementException();
+        }
+
+        // Update node reference values
+        nodeToAdd.setNextNode(currentNode.getNextNode());
+        currentNode.setNextNode(nodeToAdd);
+        // Update tail if Node is added to the end
+        if (nodeToAdd.getNextNode() == null) {
+            tail = nodeToAdd;
+        }
+        size++;
+        modCount++;
     }
 
     @Override
     public void add(int index, E element) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'add'");
+        if (index < 0 || index > size) {
+            throw new IndexOutOfBoundsException();
+        }
+        
+        Node<E> nodeToAdd = new Node<E>(element);
+
+        // Check if a value is being added to the front
+        if (index == 0) {
+            nodeToAdd.setNextNode(head); // Place new Node in front
+            head = nodeToAdd; // Update head
+            
+            if (tail == null) {
+                tail = nodeToAdd;
+            }
+        }
+        else {
+            Node<E> currentNode = head;
+
+            // Traverse to the index (starting at 1 since if statement above checked index = 0)
+            for (int i = 1; i < index; i++) {
+                currentNode = currentNode.getNextNode();
+            }
+
+            // Update node reference values
+            nodeToAdd.setNextNode(currentNode.getNextNode());
+            currentNode.setNextNode(nodeToAdd);
+            // Update tail if Node is added to the end
+            if (nodeToAdd.getNextNode() == null) {
+                tail = nodeToAdd;
+            }
+        }
+        size++;
+        modCount++;
     }
 
     @Override
@@ -102,20 +154,114 @@ public class IUSingleLinkedList<E> implements IndexedUnsortedList<E> {
 
     @Override
     public E remove(E element) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'remove'");
+        if (isEmpty()) {
+            throw new NoSuchElementException();
+        }
+        E retVal;
+        // Check if the element is in the head Node
+        if (head.getElement().equals(element)) {
+            retVal = head.getElement();
+            head = head.getNextNode(); 
+            // Check for one element lists
+            if (head == null) { // or size == 1
+                tail = null;
+            }
+        } 
+        else {
+            Node<E> previousNode = null;
+            Node<E> nodeToRemove = head;
+
+            // Traverse through each Node until the Node containing the element is found
+            while (nodeToRemove != null && !nodeToRemove.getElement().equals(element)) {
+                previousNode = nodeToRemove; 
+                nodeToRemove = nodeToRemove.getNextNode();
+            }
+
+            // if element isn't found, throw an error
+            if (nodeToRemove == null) { 
+                throw new NoSuchElementException();
+            }
+
+            // Grab the element before it is removed
+            retVal = nodeToRemove.getElement(); 
+
+            // If head is removed
+            if (previousNode == null) {
+                head = nodeToRemove.getNextNode();
+                // If list is now empty
+                if (head == null) {
+                    tail = null;
+                }
+            }
+            // If element is in a Node in the middle
+            else {
+                previousNode.setNextNode(nodeToRemove.getNextNode());
+                // Adjust tail if it was removed
+                if (nodeToRemove == tail) { 
+                    tail = previousNode;
+                }
+            }
+        }
+        size--;
+        modCount++;
+        return retVal;
     }
 
     @Override
     public E remove(int index) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'remove'");
+        if (index < 0 || index >= size) {
+            throw new IndexOutOfBoundsException();
+        }
+
+        E retVal;
+        // Check if index is based off of first index
+        if (index == 0) {
+            retVal = head.getElement();
+            head = head.getNextNode();
+            // Check if list is empty now
+            if (head == null) {
+                tail = null;
+            }
+        }
+        else {
+            Node<E> previousNode = head;
+            Node<E> nodeToRemove = previousNode.getNextNode();
+
+            // Traverse to the index (starting at 1 because previous if check index = 1)
+            for (int i = 1; i < index; i++) {
+                previousNode = nodeToRemove;
+                nodeToRemove = nodeToRemove.getNextNode();
+            }
+
+            // Store element before Node is removed
+            retVal = nodeToRemove.getElement();
+            
+            // Remove the Node
+            previousNode.setNextNode(nodeToRemove.getNextNode());
+
+            if (nodeToRemove == tail) {
+                tail = previousNode;
+            }
+            }
+        size--;
+        modCount++;
+        return retVal;
     }
 
     @Override
     public void set(int index, E element) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'set'");
+        if (index < 0 || index >= size) {
+            throw new IndexOutOfBoundsException();
+        }
+
+        Node<E> currentNode = head;
+        // Traverse to the index 
+        for (int i = 0; i < index; i++) {
+            currentNode.getNextNode();
+        }
+        // Update element
+        currentNode.setElement(element);
+        modCount++;
     }
 
     @Override
@@ -135,7 +281,7 @@ public class IUSingleLinkedList<E> implements IndexedUnsortedList<E> {
         Node<E> currentNode = head;
         int currentIndex = 0;
         boolean foundElement = false;
-        while(currentNode != null && !foundElement) {
+        while (currentNode != null && !foundElement) {
             if (currentNode.getElement().equals(element)) {
                 foundElement = true;
             }
