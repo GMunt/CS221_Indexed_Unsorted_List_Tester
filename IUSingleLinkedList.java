@@ -183,6 +183,22 @@ public class IUSingleLinkedList<E> implements IndexedUnsortedList<E> {
     }
 
     @Override
+    public String toString() {
+        StringBuilder resString = new StringBuilder();
+        resString.append("[");
+        for (E element : this) {
+            resString.append(element.toString());
+            resString.append(", ");
+        }
+        if (size > 0) {
+            resString.delete(resString.length() - 2, resString.length());
+        }
+        resString.append("]");
+
+        return resString.toString();
+    }
+
+    @Override
     public Iterator<E> iterator() {
         return new SLLIterator();
     }

@@ -228,18 +228,6 @@ public class IUArrayList<E> implements IndexedUnsortedList<E> {
     // Added to pass toString() tests
     @Override
     public String toString() {
-        // String resString = "[";
-
-        // for (int i = 0; i < rear; i++) {
-        //     resString += array[i]; 
-        //     if (i < rear - 1) {
-        //         resString += ", ";
-        //     }
-        // }
-        // resString += "]";
-
-        // Commenting out because adding to string in a loop = n^2
-
         StringBuilder resString = new StringBuilder();
         resString.append("[");
         for (E element : this) {
