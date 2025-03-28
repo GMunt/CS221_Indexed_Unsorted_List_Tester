@@ -145,7 +145,7 @@ public class IUSingleLinkedList<E> implements IndexedUnsortedList<E> {
                 newTailNode = newTailNode.getNextNode();
             }
             tail = newTailNode;
-            newTailNode.setElement(null);
+            newTailNode.setNextNode(null);
         }
         size--;
         modCount++;
