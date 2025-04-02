@@ -1,3 +1,4 @@
+import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.ListIterator;
 import java.util.NoSuchElementException;
@@ -214,20 +215,122 @@ public class IUDoubleLinkedList<E> implements IndexedUnsortedList<E> {
 
     @Override
     public Iterator iterator() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'iterator'");
+        return new IUDLLIterator();
     }
 
     @Override
     public ListIterator listIterator() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'listIterator'");
+        return new IUDLLIterator();
     }
 
     @Override
     public ListIterator listIterator(int startingIndex) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'listIterator'");
+        return new IUDLLIterator(startingIndex);
     }
+    
+    /**
+     * ListIterator (and basic Iterator) for IUDLL.
+     */
+    private class IUDLLIterator implements ListIterator<E> {
+        private Node<E> nextNode;
+        private int nextIndex;
+        private int iterModCount;
 
+        /**
+         * Initialize iterator before first element
+         */
+        public IUDLLIterator() {
+            nextNode = head;
+            nextIndex = 0;
+            iterModCount = modCount;
+        }
+
+        /**
+         * Initialize iterator before startingIndex
+         * @param startingIndex index of element that would be next
+         */
+        public IUDLLIterator(int startingIndex) {
+            if (startingIndex < 0 || startingIndex > size) {
+                throw new IndexOutOfBoundsException();
+            }
+            nextNode = head;
+            // TODO optimize to start at tail if past halfway point
+            for (int i = 0; i < startingIndex; i++) {
+                nextNode = nextNode.getNextNode();
+            }
+            nextIndex = startingIndex;
+            iterModCount = modCount;
+        }
+
+        @Override
+        public boolean hasNext() {
+            if (iterModCount != modCount) {
+                throw new ConcurrentModificationException();
+            }
+            return (nextNode != null);
+        }
+
+        @Override
+        public E next() {
+            if (!hasNext()) {
+                throw new NoSuchElementException();
+            }
+            E retVal = nextNode.getElement();
+            nextNode = nextNode.getNextNode();
+            nextIndex++;
+            return retVal;
+        }
+
+        @Override
+        public boolean hasPrevious() {
+            if (iterModCount != modCount) {
+                throw new ConcurrentModificationException();
+            }
+            return (nextNode != head);
+        }
+
+        @Override
+        public E previous() {
+            if (!hasPrevious()) {
+                throw new NoSuchElementException();
+            }
+            if (nextNode != null) {
+                nextNode = nextNode.getPreviousNode();
+            }
+            else {
+                nextNode = tail;
+            }
+            nextIndex--;
+            return nextNode.getElement();
+        }
+
+        @Override
+        public int nextIndex() {
+            return nextIndex;
+        }
+
+        @Override
+        public int previousIndex() {
+            return nextIndex - 1;
+        }
+
+        @Override
+        public void remove() {
+            // TODO Auto-generated method stub
+            throw new UnsupportedOperationException("Unimplemented method 'remove'");
+        }
+
+        @Override
+        public void set(E e) {
+            // TODO Auto-generated method stub
+            throw new UnsupportedOperationException("Unimplemented method 'set'");
+        }
+
+        @Override
+        public void add(E e) {
+            // TODO Auto-generated method stub
+            throw new UnsupportedOperationException("Unimplemented method 'add'");
+        }
+
+    }
 }
