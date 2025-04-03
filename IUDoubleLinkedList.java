@@ -113,8 +113,13 @@ public class IUDoubleLinkedList<E> implements IndexedUnsortedList<E> {
 
     @Override
     public E remove(int index) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'remove'");
+        if (index < 0 || index >= size) { // because remove's valid index range != ListIterator's range
+            throw new IndexOutOfBoundsException();
+        }
+        ListIterator<E> lit = listIterator(index);
+        E retVal = lit.next();
+        lit.remove();
+        return retVal;
     }
 
     @Override
@@ -138,11 +143,13 @@ public class IUDoubleLinkedList<E> implements IndexedUnsortedList<E> {
         if (index < 0 || index >=  size) {
             throw new IndexOutOfBoundsException();
         }
-        Node<E> currentNode = head;
-        for (int i = 0; i < index; i++) {
-            currentNode = currentNode.getNextNode();
-        }
-        return currentNode.getElement();
+        // Node<E> currentNode = head;
+        // for (int i = 0; i < index; i++) {
+        //     currentNode = currentNode.getNextNode();
+        // }
+        // return currentNode.getElement();
+        ListIterator<E> lit = listIterator(index);
+        return lit.next();
     }
 
     @Override
@@ -233,6 +240,7 @@ public class IUDoubleLinkedList<E> implements IndexedUnsortedList<E> {
      */
     private class IUDLLIterator implements ListIterator<E> {
         private Node<E> nextNode;
+        private Node<E> lastReturnedNode;
         private int nextIndex;
         private int iterModCount;
 
@@ -241,6 +249,7 @@ public class IUDoubleLinkedList<E> implements IndexedUnsortedList<E> {
          */
         public IUDLLIterator() {
             nextNode = head;
+            lastReturnedNode = null;
             nextIndex = 0;
             iterModCount = modCount;
         }
@@ -259,6 +268,7 @@ public class IUDoubleLinkedList<E> implements IndexedUnsortedList<E> {
                 nextNode = nextNode.getNextNode();
             }
             nextIndex = startingIndex;
+            lastReturnedNode = null;
             iterModCount = modCount;
         }
 
@@ -276,6 +286,7 @@ public class IUDoubleLinkedList<E> implements IndexedUnsortedList<E> {
                 throw new NoSuchElementException();
             }
             E retVal = nextNode.getElement();
+            lastReturnedNode = nextNode; // Set returned node to next node before it moves
             nextNode = nextNode.getNextNode();
             nextIndex++;
             return retVal;
@@ -300,6 +311,7 @@ public class IUDoubleLinkedList<E> implements IndexedUnsortedList<E> {
             else {
                 nextNode = tail;
             }
+            lastReturnedNode = nextNode; // Store returned node after moving 
             nextIndex--;
             return nextNode.getElement();
         }
@@ -316,8 +328,37 @@ public class IUDoubleLinkedList<E> implements IndexedUnsortedList<E> {
 
         @Override
         public void remove() {
-            // TODO Auto-generated method stub
-            throw new UnsupportedOperationException("Unimplemented method 'remove'");
+            if (iterModCount != modCount) {
+                throw new ConcurrentModificationException();
+            }
+            if (lastReturnedNode == null) { // Can't remove
+                throw new IllegalStateException();
+            }
+            // Check if head is removed
+            if (lastReturnedNode == head) {
+                head = head.getNextNode();
+            }
+            else {
+                lastReturnedNode.getPreviousNode().setNextNode(lastReturnedNode.getNextNode()); // Bypass the last returned node (left side)
+            }
+            // Check if tail is removed
+            if (lastReturnedNode == tail) {
+                tail = tail.getPreviousNode();
+            }
+            else {
+                lastReturnedNode.getNextNode().setPreviousNode(lastReturnedNode.getPreviousNode()); // Bypass the last returned node (right side)
+            }
+            // Need to know if last move was next or previous to update list/iterator correctly
+            if (lastReturnedNode == nextNode) { // Last move was previous
+                nextNode = nextNode.getNextNode();
+            }
+            else { // Last move was next
+                nextIndex--;
+            }
+            lastReturnedNode = null;
+            size--;
+            modCount++;
+            iterModCount++;
         }
 
         @Override
@@ -330,6 +371,8 @@ public class IUDoubleLinkedList<E> implements IndexedUnsortedList<E> {
         public void add(E e) {
             // TODO Auto-generated method stub
             throw new UnsupportedOperationException("Unimplemented method 'add'");
+            // Can always call add unless concurrent error. Always adds to the left of iterator 
+            // Set lastReturned = null
         }
 
     }
