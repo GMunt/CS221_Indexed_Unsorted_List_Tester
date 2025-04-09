@@ -22,23 +22,36 @@ public class IUDoubleLinkedList<E> implements IndexedUnsortedList<E> {
 
     @Override
     public void addToFront(E element) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'addToFront'");
+        // Node<E> newNode = new Node<E>(element);
+        // newNode.setNextNode(head);
+        // if (isEmpty()) {
+        //     head = newNode;
+        // }
+        // else {
+        //     head.setPreviousNode(newNode);
+        // }
+        // head = newNode;
+        // size++;
+        // modCount++;
+        ListIterator<E> lit = listIterator();
+        lit.add(element);
     }
 
     @Override
     public void addToRear(E element) {
-        Node<E> newNode = new Node<E>(element);
-        newNode.setPreviousNode(tail);
-        if (isEmpty()) {
-            head = newNode;
-        }
-        else {
-            tail.setNextNode(newNode);
-        }
-        tail = newNode;
-        size++;
-        modCount++;
+        // Node<E> newNode = new Node<E>(element);
+        // newNode.setPreviousNode(tail);
+        // if (isEmpty()) {
+        //     head = newNode;
+        // }
+        // else {
+        //     tail.setNextNode(newNode);
+        // }
+        // tail = newNode;
+        // size++;
+        // modCount++;
+        ListIterator<E> lit = listIterator(size);
+        lit.add(element);
     }
 
     @Override
@@ -77,14 +90,48 @@ public class IUDoubleLinkedList<E> implements IndexedUnsortedList<E> {
 
     @Override
     public void add(int index, E element) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'add'");
+        // if (index < 0 || index > size) {
+        //     throw new IndexOutOfBoundsException();
+        // }
+        // if (index == 0) { // If adding before head
+        //     addToFront(element);
+        // }
+        // else if (index == size - 1) { // If adding after tail
+        //     addToRear(element);
+        // }
+        // else {
+        //     Node<E> newNode = new Node<E>(element);
+        //     Node<E> currentNode = head;
+        //     for (int i = 0; i < index; i++) {
+        //         currentNode = currentNode.getNextNode();
+        //     }
+
+        //     currentNode.getNextNode().setPreviousNode(newNode);
+        //     newNode.setNextNode(currentNode.getNextNode());
+        //     newNode.setPreviousNode(currentNode);
+        //     currentNode.setNextNode(newNode);
+        // }
+        if (index < 0 || index > size) { 
+            throw new IndexOutOfBoundsException();
+        }
+        ListIterator<E> lit = listIterator();
+        for (int i = 0; i < index; i++) {
+            lit.next();
+        }
+        lit.add(element);
+        // size++;
+        // modCount++;
     }
 
     @Override
     public E removeFirst() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'removeFirst'");
+        if (isEmpty()) {
+            throw new NoSuchElementException();
+        }
+        ListIterator<E> lit = listIterator();
+        E retVal = lit.next();
+        lit.remove();
+        return retVal;
     }
 
     @Override
@@ -92,23 +139,60 @@ public class IUDoubleLinkedList<E> implements IndexedUnsortedList<E> {
         if (isEmpty()) {
             throw new NoSuchElementException();
         }
-        E retVal = tail.getElement();
-        if (head == tail) { // size == 1
-            head = null;
-        } 
-        else {
-            tail.getPreviousNode().setNextNode(null);
-        }
-        tail = tail.getPreviousNode();
-        size--;
-        modCount++;
+        // E retVal = tail.getElement();
+        // if (head == tail) { // size == 1
+        //     head = null;
+        // } 
+        // else {
+        //     tail.getPreviousNode().setNextNode(null);
+        // }
+        // tail = tail.getPreviousNode();
+        // size--;
+        // modCount++;
+        // return retVal;
+        ListIterator<E> lit = listIterator(size - 1);
+        E retVal = lit.next();
+        lit.remove();
         return retVal;
     }
 
     @Override
     public E remove(E element) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'remove'");
+        // if (isEmpty()) {
+        //     throw new NoSuchElementException();
+        // }
+        // E retVal;
+        // boolean foundElement = false;
+        // ListIterator<E> lit = listIterator(); 
+        // while (lit.hasNext() && !foundElement) {
+        //     if (lit.next() == element) {
+        //         foundElement = true;
+        //     }
+        //     else {
+        //         lit.next();
+        //     }
+        // }
+        // if (!foundElement) {
+        //     throw new NoSuchElementException();
+        // }
+        // retVal = lit.previous();
+        // lit.remove();
+        // return retVal;
+        if (isEmpty()) {
+            throw new NoSuchElementException();
+        }
+    
+        ListIterator<E> lit = listIterator(); 
+        while (lit.hasNext()) {
+            E current = lit.next(); // Move to the next element
+            if (current.equals(element)) {
+                lit.remove(); // Remove the element
+                return current; // Return the removed element
+            }
+        }
+    
+        // If we reach here, the element wasn't found
+        throw new NoSuchElementException("Element not found: " + element);
     }
 
     @Override
@@ -131,7 +215,7 @@ public class IUDoubleLinkedList<E> implements IndexedUnsortedList<E> {
         Node<E> currentNode = head;
         // Traverse to the index 
         for (int i = 0; i < index; i++) {
-            currentNode.getNextNode();
+            currentNode = currentNode.getNextNode();
         }
         // Update element
         currentNode.setElement(element);
@@ -335,15 +419,15 @@ public class IUDoubleLinkedList<E> implements IndexedUnsortedList<E> {
                 throw new IllegalStateException();
             }
             // Check if head is removed
-            if (lastReturnedNode == head) {
-                head = head.getNextNode();
+            if (lastReturnedNode.getPreviousNode() == null) {
+                head = lastReturnedNode.getNextNode();
             }
             else {
                 lastReturnedNode.getPreviousNode().setNextNode(lastReturnedNode.getNextNode()); // Bypass the last returned node (left side)
             }
             // Check if tail is removed
-            if (lastReturnedNode == tail) {
-                tail = tail.getPreviousNode();
+            if (lastReturnedNode.getNextNode() == null) {
+                tail = lastReturnedNode.getPreviousNode();
             }
             else {
                 lastReturnedNode.getNextNode().setPreviousNode(lastReturnedNode.getPreviousNode()); // Bypass the last returned node (right side)
@@ -363,16 +447,48 @@ public class IUDoubleLinkedList<E> implements IndexedUnsortedList<E> {
 
         @Override
         public void set(E e) {
-            // TODO Auto-generated method stub
-            throw new UnsupportedOperationException("Unimplemented method 'set'");
+            if (iterModCount != modCount) {
+                throw new ConcurrentModificationException();
+            }
+            if (lastReturnedNode == null) { // Can't set
+                throw new IllegalStateException();
+            }
+            lastReturnedNode.setElement(e);
+            modCount++;
+            iterModCount++;
         }
 
         @Override
         public void add(E e) {
-            // TODO Auto-generated method stub
-            throw new UnsupportedOperationException("Unimplemented method 'add'");
-            // Can always call add unless concurrent error. Always adds to the left of iterator 
-            // Set lastReturned = null
+            if (iterModCount != modCount) {
+                throw new ConcurrentModificationException();
+            }
+            Node<E> newNode = new Node<E>(e);
+
+            if (head == null) { // Check if list is empty
+                head = tail = newNode;
+            }
+            else if (nextNode == head) { // Add to front
+                newNode.setNextNode(head);
+                head.setPreviousNode(newNode);
+                head = newNode;
+            }
+            else if (nextNode == null) { // Add to rear
+                newNode.setPreviousNode(tail);
+                tail.setNextNode(newNode);
+                tail = newNode;
+            }
+            else { // Add anywhere else
+                newNode.setNextNode(nextNode);
+                newNode.setPreviousNode(lastReturnedNode);
+                nextNode.setPreviousNode(newNode);
+                nextNode.setNextNode(lastReturnedNode);
+            }
+
+            lastReturnedNode = null;
+            size++;
+            modCount++;
+            iterModCount++;
         }
 
     }
