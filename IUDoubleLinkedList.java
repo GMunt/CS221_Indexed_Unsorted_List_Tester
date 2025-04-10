@@ -343,24 +343,25 @@ public class IUDoubleLinkedList<E> implements IndexedUnsortedList<E> {
             if (startingIndex < 0 || startingIndex > size) {
                 throw new IndexOutOfBoundsException();
             }
-            // nextNode = head;          
-            // for (int i = 0; i < startingIndex; i++) {
-            //     nextNode = nextNode.getNextNode();
-            // }
-
-            // TODO optimize to start at tail if past halfway point
-            if (startingIndex <= size / 2) {  // Closer to the head
-                nextNode = head;
-                for (int i = 0; i < startingIndex; i++) {
-                    nextNode = nextNode.getNextNode();
-                }
-            } else {  // Closer to the tail
-                nextNode = tail;
-                // Start from the tail, going backwards
-                for (int i = size; i >= startingIndex; i--) {
-                    nextNode = nextNode.getPreviousNode();
-                }
+            nextNode = head;          
+            for (int i = 0; i < startingIndex; i++) {
+                nextNode = nextNode.getNextNode();
             }
+
+            // // TODO optimize to start at tail if past halfway point
+            // if (startingIndex <= size / 2) {  // Closer to the head
+            //     nextNode = head;
+            //     for (int i = 0; i < startingIndex; i++) {
+            //         nextNode = nextNode.getNextNode();
+            //     }
+            //     // TODO off by one, add other else to fix single element list
+            // } else {  // Closer to the tail
+            //     nextNode = tail;
+            //     // Start from the tail, going backwards
+            //     for (int i = size; i >= startingIndex; i--) {
+            //         nextNode = nextNode.getPreviousNode();
+            //     }
+            // }
 
             nextIndex = startingIndex;
             lastReturnedNode = null;
@@ -375,6 +376,7 @@ public class IUDoubleLinkedList<E> implements IndexedUnsortedList<E> {
 
         @Override
         public E next() {
+            checkForConcurrentModification();
             if (!hasNext()) {
                 throw new NoSuchElementException();
             }
@@ -393,6 +395,7 @@ public class IUDoubleLinkedList<E> implements IndexedUnsortedList<E> {
 
         @Override
         public E previous() {
+            checkForConcurrentModification();
             if (!hasPrevious()) {
                 throw new NoSuchElementException();
             }
@@ -409,11 +412,13 @@ public class IUDoubleLinkedList<E> implements IndexedUnsortedList<E> {
 
         @Override
         public int nextIndex() {
+            checkForConcurrentModification();
             return nextIndex;
         }
 
         @Override
         public int previousIndex() {
+            checkForConcurrentModification();
             return nextIndex - 1;
         }
 
