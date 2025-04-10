@@ -343,11 +343,25 @@ public class IUDoubleLinkedList<E> implements IndexedUnsortedList<E> {
             if (startingIndex < 0 || startingIndex > size) {
                 throw new IndexOutOfBoundsException();
             }
-            nextNode = head;
+            // nextNode = head;          
+            // for (int i = 0; i < startingIndex; i++) {
+            //     nextNode = nextNode.getNextNode();
+            // }
+
             // TODO optimize to start at tail if past halfway point
-            for (int i = 0; i < startingIndex; i++) {
-                nextNode = nextNode.getNextNode();
+            if (startingIndex <= size / 2) {  // Closer to the head
+                nextNode = head;
+                for (int i = 0; i < startingIndex; i++) {
+                    nextNode = nextNode.getNextNode();
+                }
+            } else {  // Closer to the tail
+                nextNode = tail;
+                // Start from the tail, going backwards
+                for (int i = size; i >= startingIndex; i--) {
+                    nextNode = nextNode.getPreviousNode();
+                }
             }
+
             nextIndex = startingIndex;
             lastReturnedNode = null;
             iterModCount = modCount;
