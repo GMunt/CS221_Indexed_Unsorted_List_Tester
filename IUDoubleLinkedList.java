@@ -111,16 +111,13 @@ public class IUDoubleLinkedList<E> implements IndexedUnsortedList<E> {
         //     newNode.setPreviousNode(currentNode);
         //     currentNode.setNextNode(newNode);
         // }
+        // size++;
+        // modCount++;
         if (index < 0 || index > size) { 
             throw new IndexOutOfBoundsException();
         }
-        ListIterator<E> lit = listIterator();
-        for (int i = 0; i < index; i++) {
-            lit.next();
-        }
+        ListIterator<E> lit = listIterator(index);
         lit.add(element);
-        // size++;
-        // modCount++;
     }
 
     @Override
@@ -358,9 +355,7 @@ public class IUDoubleLinkedList<E> implements IndexedUnsortedList<E> {
 
         @Override
         public boolean hasNext() {
-            if (iterModCount != modCount) {
-                throw new ConcurrentModificationException();
-            }
+            checkForConcurrentModification();
             return (nextNode != null);
         }
 
@@ -378,9 +373,7 @@ public class IUDoubleLinkedList<E> implements IndexedUnsortedList<E> {
 
         @Override
         public boolean hasPrevious() {
-            if (iterModCount != modCount) {
-                throw new ConcurrentModificationException();
-            }
+            checkForConcurrentModification();
             return (nextNode != head);
         }
 
@@ -412,9 +405,7 @@ public class IUDoubleLinkedList<E> implements IndexedUnsortedList<E> {
 
         @Override
         public void remove() {
-            if (iterModCount != modCount) {
-                throw new ConcurrentModificationException();
-            }
+            checkForConcurrentModification();
             if (lastReturnedNode == null) { // Can't remove
                 throw new IllegalStateException();
             }
@@ -447,9 +438,7 @@ public class IUDoubleLinkedList<E> implements IndexedUnsortedList<E> {
 
         @Override
         public void set(E e) {
-            if (iterModCount != modCount) {
-                throw new ConcurrentModificationException();
-            }
+            checkForConcurrentModification();
             if (lastReturnedNode == null) { // Can't set
                 throw new IllegalStateException();
             }
@@ -460,9 +449,7 @@ public class IUDoubleLinkedList<E> implements IndexedUnsortedList<E> {
 
         @Override
         public void add(E e) {
-            if (iterModCount != modCount) {
-                throw new ConcurrentModificationException();
-            }
+            checkForConcurrentModification();
             Node<E> newNode = new Node<E>(e);
 
             if (head == null) { // Check if list is empty
@@ -479,17 +466,27 @@ public class IUDoubleLinkedList<E> implements IndexedUnsortedList<E> {
                 tail = newNode;
             }
             else { // Add anywhere else
-                newNode.setNextNode(nextNode);
-                newNode.setPreviousNode(lastReturnedNode);
+                newNode.setNextNode(nextNode); 
+                newNode.setPreviousNode(nextNode.getPreviousNode()); 
+                nextNode.getPreviousNode().setNextNode(newNode);     
                 nextNode.setPreviousNode(newNode);
-                nextNode.setNextNode(lastReturnedNode);
             }
 
             lastReturnedNode = null;
             size++;
             modCount++;
             iterModCount++;
+            nextIndex++;
         }
 
+        /**
+         * Helper method to check if iterModCount is different than 
+         * the modCount of the whole list
+         */
+        private void checkForConcurrentModification() {
+            if (iterModCount != modCount) {
+                throw new ConcurrentModificationException();
+            }
+        }
     }
 }
