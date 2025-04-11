@@ -61,31 +61,41 @@ public class IUDoubleLinkedList<E> implements IndexedUnsortedList<E> {
 
     @Override
     public void addAfter(E element, E target) {
-        if (isEmpty()) {
+        if (isEmpty() || target == null) {
             throw new NoSuchElementException();
         }
-        Node<E> nodeToAdd = new Node<E>(element);
-        Node<E> currentNode = head;
-        // Traverse
-        while (currentNode != null && !currentNode.getElement().equals(target)) {
-            currentNode = currentNode.getNextNode();
+        ListIterator<E> lit = listIterator();
+        E current = null;
+        while (lit.hasNext() && current != target) { // traverse through list
+            current = lit.next();
         }
-        // if the target isn't found
-        if (currentNode == null) { 
+        if (!current.equals(target)) { // if element is not found
             throw new NoSuchElementException();
         }
-        // Update Nodes 
-        nodeToAdd.setPreviousNode(currentNode);
-        nodeToAdd.setNextNode(currentNode.getNextNode());
-        currentNode.setNextNode(nodeToAdd);
-        if (nodeToAdd.getNextNode() == null) { // or currentNode == tail
-            tail = nodeToAdd;
-        }
-        else {
-            nodeToAdd.getNextNode().setPreviousNode(nodeToAdd);
-        }
-        size++;
-        modCount++;
+        lit.add(element);
+
+        // Node<E> nodeToAdd = new Node<E>(element);
+        // Node<E> currentNode = head;
+        // // Traverse
+        // while (currentNode != null && !currentNode.getElement().equals(target)) {
+        //     currentNode = currentNode.getNextNode();
+        // }
+        // // if the target isn't found
+        // if (currentNode == null) { 
+        //     throw new NoSuchElementException();
+        // }
+        // // Update Nodes 
+        // nodeToAdd.setPreviousNode(currentNode);
+        // nodeToAdd.setNextNode(currentNode.getNextNode());
+        // currentNode.setNextNode(nodeToAdd);
+        // if (nodeToAdd.getNextNode() == null) { // or currentNode == tail
+        //     tail = nodeToAdd;
+        // }
+        // else {
+        //     nodeToAdd.getNextNode().setPreviousNode(nodeToAdd);
+        // }
+        // size++;
+        // modCount++;
     }
 
     @Override
@@ -204,19 +214,22 @@ public class IUDoubleLinkedList<E> implements IndexedUnsortedList<E> {
     }
 
     @Override
-    public void set(int index, E element) {
+    public void set(int index, E element) {      
         if (index < 0 || index >= size) {
             throw new IndexOutOfBoundsException();
         }
+        ListIterator lit = listIterator(index);
+        lit.next();
+        lit.set(element);
 
-        Node<E> currentNode = head;
-        // Traverse to the index 
-        for (int i = 0; i < index; i++) {
-            currentNode = currentNode.getNextNode();
-        }
-        // Update element
-        currentNode.setElement(element);
-        modCount++;
+        // Node<E> currentNode = head;
+        // // Traverse to the index 
+        // for (int i = 0; i < index; i++) {
+        //     currentNode = currentNode.getNextNode();
+        // }
+        // // Update element
+        // currentNode.setElement(element);
+        // modCount++;
     }
 
     @Override
@@ -343,19 +356,23 @@ public class IUDoubleLinkedList<E> implements IndexedUnsortedList<E> {
             if (startingIndex < 0 || startingIndex > size) {
                 throw new IndexOutOfBoundsException();
             }
-            nextNode = head;          
-            for (int i = 0; i < startingIndex; i++) {
-                nextNode = nextNode.getNextNode();
-            }
+            // nextNode = head;          
+            // for (int i = 0; i < startingIndex; i++) {
+            //     nextNode = nextNode.getNextNode();
+            // }
 
-            // // TODO optimize to start at tail if past halfway point
+            // TODO optimize to start at tail if past halfway point
             // if (startingIndex <= size / 2) {  // Closer to the head
             //     nextNode = head;
             //     for (int i = 0; i < startingIndex; i++) {
             //         nextNode = nextNode.getNextNode();
             //     }
             //     // TODO off by one, add other else to fix single element list
-            // } else {  // Closer to the tail
+            // }
+            // else if (size == 1) {
+            //     nextNode = tail.getNextNode();
+            // }
+            // else {  // Closer to the tail
             //     nextNode = tail;
             //     // Start from the tail, going backwards
             //     for (int i = size; i >= startingIndex; i--) {
