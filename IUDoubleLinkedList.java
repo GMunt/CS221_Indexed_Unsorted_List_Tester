@@ -356,30 +356,26 @@ public class IUDoubleLinkedList<E> implements IndexedUnsortedList<E> {
             if (startingIndex < 0 || startingIndex > size) {
                 throw new IndexOutOfBoundsException();
             }
-            // nextNode = head;          
-            // for (int i = 0; i < startingIndex; i++) {
-            //     nextNode = nextNode.getNextNode();
-            // }
-
-            // TODO optimize to start at tail if past halfway point
-            // if (startingIndex <= size / 2) {  // Closer to the head
-            //     nextNode = head;
-            //     for (int i = 0; i < startingIndex; i++) {
-            //         nextNode = nextNode.getNextNode();
-            //     }
-            //     // TODO off by one, add other else to fix single element list
-            // }
-            // else if (size == 1) {
-            //     nextNode = tail.getNextNode();
-            // }
-            // else {  // Closer to the tail
-            //     nextNode = tail;
-            //     // Start from the tail, going backwards
-            //     for (int i = size; i >= startingIndex; i--) {
-            //         nextNode = nextNode.getPreviousNode();
-            //     }
-            // }
-
+            if (startingIndex == 0) { // Start before the head
+                nextNode = head;
+            }
+            else if (startingIndex == size) { // Set nextNode to null to indicate end of list
+                nextNode = null;
+            }
+            else if (startingIndex <= size / 2) { // Start iterator from head side
+                nextNode = head;
+                // Start from the head, going forwards
+                for (int i = 0; i < startingIndex; i++) {
+                    nextNode = nextNode.getNextNode();
+                }
+            }
+            else { // Start iterator from tail side
+                nextNode = tail;
+                // Start from the tail, going backwards
+                for (int i = size - 1; i > startingIndex; i--) {
+                    nextNode = nextNode.getPreviousNode();
+                }
+            }
             nextIndex = startingIndex;
             lastReturnedNode = null;
             iterModCount = modCount;
