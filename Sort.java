@@ -18,7 +18,7 @@ public class Sort
 	 */
 	private static <T> IndexedUnsortedList<T> newList() 
 	{
-		return new WrappedDLL<T>(); //TODO: replace with your IUDoubleLinkedList for extra-credit
+		return new IUDoubleLinkedList<T>(); //TODO: replace with your IUDoubleLinkedList for extra-credit
 	}
 	
 	/**
@@ -68,9 +68,50 @@ public class Sort
 	 */
 	private static <T extends Comparable<T>> void mergesort(IndexedUnsortedList<T> list)
 	{
-		// TODO: Implement recursive mergesort algorithm 
-	}
+		if (list.size() <= 1) {
+			return; // Base case
+		}
+
+		// Split the list into two halves
+		IndexedUnsortedList<T> leftHalf = newList(); // Create a new list for the left half
+		IndexedUnsortedList<T> rightHalf = newList(); // Create a new list for the right half
+
+		// Divide the original list into two halves
+		int originalSize = list.size();
+		int mid = list.size() / 2; 
 		
+		// Fill left half of list
+		for (int i = 0; i < mid; i++) {
+			leftHalf.add(list.removeFirst());
+		}
+		// Fill right half of list
+		for (int i = mid; i < originalSize; i++) {
+			rightHalf.add(list.removeFirst());
+		}
+
+		// Recursively apply the Merge Sort algorithm to each half
+		mergesort(leftHalf);
+		mergesort(rightHalf);
+
+		// Merge the sorted half lists back into the original list by repeatedly taking the smaller of the two first elements of the halves and adding it back into the original list until both halves are emptied
+		while (!leftHalf.isEmpty() && !rightHalf.isEmpty()) {
+			if (leftHalf.first().compareTo(rightHalf.first()) < 0) {
+				list.add(leftHalf.removeFirst());
+			} else {
+				list.add(rightHalf.removeFirst());
+			}
+		}
+
+		// Add any remaining elements from leftHalf
+		while (!leftHalf.isEmpty()) {
+			list.add(leftHalf.removeFirst());
+		}
+
+		// Add any remaining elements from rightHalf
+		while (!rightHalf.isEmpty()) {
+			list.add(rightHalf.removeFirst());
+		}
+	}
 	/**
 	 * Mergesort algorithm to sort objects in a list 
 	 * that implements the IndexedUnsortedList interface,
@@ -86,7 +127,49 @@ public class Sort
 	 */
 	private static <T> void mergesort(IndexedUnsortedList<T> list, Comparator<T> c)
 	{
-		// TODO: Implement recursive mergesort algorithm using Comparator
+		if (list.size() <= 1) {
+			return; // Base case
+		}
+
+		// Split the list into two halves
+		IndexedUnsortedList<T> leftHalf = newList(); // Create a new list for the left half
+		IndexedUnsortedList<T> rightHalf = newList(); // Create a new list for the right half
+
+		// Divide the original list into two halves
+		int originalSize = list.size();
+		int mid = list.size() / 2; 
+		
+		// Fill left half of list
+		for (int i = 0; i < mid; i++) {
+			leftHalf.add(list.removeFirst());
+		}
+		// Fill right half of list
+		for (int i = mid; i < originalSize; i++) {
+			rightHalf.add(list.removeFirst());
+		}
+
+		// Recursively apply the Merge Sort algorithm to each half
+		mergesort(leftHalf, c);
+		mergesort(rightHalf, c);
+
+		// Merge the sorted half lists back into the original list by repeatedly taking the smaller of the two first elements of the halves and adding it back into the original list until both halves are emptied
+		while (!leftHalf.isEmpty() && !rightHalf.isEmpty()) {
+			if (c.compare(leftHalf.first(), rightHalf.first()) < 0) {
+				list.add(leftHalf.removeFirst());
+			} else {
+				list.add(rightHalf.removeFirst());
+			}
+		}
+
+		// Add any remaining elements from leftHalf
+		while (!leftHalf.isEmpty()) {
+			list.add(leftHalf.removeFirst());
+		}
+
+		// Add any remaining elements from rightHalf
+		while (!rightHalf.isEmpty()) {
+			list.add(rightHalf.removeFirst());
+		}
 
 	}
 	
